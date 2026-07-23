@@ -29,7 +29,117 @@ STEP-4: Multiply the two matrices to obtain the cipher text of length three.
 STEP-5: Combine all these groups to get the complete cipher text.
 
 ## PROGRAM 
+```
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+int main()
+{
+    char msg[MAX];
+    int n, i, j, k, t;
+    int key[10][10], inverse[10][10];
+    int plain[MAX], cipher[MAX], decrypted[MAX];
+
+    /* Input Plain Text */
+    printf("Enter Plain Text (CAPITAL letters only): ");
+    scanf("%s", msg);
+
+    /* Input Matrix Order */
+    printf("Enter the order of the matrix: ");
+    scanf("%d", &n);
+
+    /* Input Key Matrix */
+    printf("\nEnter the Key Matrix (%d x %d):\n", n, n);
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            scanf("%d", &key[i][j]);
+        }
+    }
+
+    /* Input Inverse Matrix */
+    printf("\nEnter the Inverse Matrix (%d x %d):\n", n, n);
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            scanf("%d", &inverse[i][j]);
+        }
+    }
+
+    int len = strlen(msg);
+
+    /* Padding with X if required */
+    while (len % n != 0)
+    {
+        msg[len] = 'X';
+        len++;
+    }
+    msg[len] = '\0';
+
+    printf("\nPlain Text after padding : %s\n", msg);
+
+    /* Convert letters to numbers */
+    for (i = 0; i < len; i++)
+    {
+        plain[i] = msg[i] - 'A';
+    }
+
+    /* Encryption */
+    for (i = 0; i < len; i += n)
+    {
+        for (j = 0; j < n; j++)
+        {
+            t = 0;
+
+            for (k = 0; k < n; k++)
+            {
+                t += key[j][k] * plain[i + k];
+            }
+
+            cipher[i + j] = t % 26;
+        }
+    }
+
+    printf("\nEncrypted Cipher Text : ");
+    for (i = 0; i < len; i++)
+    {
+        printf("%c", cipher[i] + 'A');
+    }
+
+    /* Decryption */
+    for (i = 0; i < len; i += n)
+    {
+        for (j = 0; j < n; j++)
+        {
+            t = 0;
+
+            for (k = 0; k < n; k++)
+            {
+                t += inverse[j][k] * cipher[i + k];
+            }
+
+            decrypted[i + j] = t % 26;
+        }
+    }
+
+    printf("\nDecrypted Text         : ");
+    for (i = 0; i < len; i++)
+    {
+        printf("%c", decrypted[i] + 'A');
+    }
+
+    printf("\n");
+
+    return 0;
+}
+```
 
 ## OUTPUT
+<img width="1917" height="907" alt="Screenshot 2026-07-23 202858" src="https://github.com/user-attachments/assets/cf3a8155-2403-47a8-9407-3e7fcdf2e91c" />
 
 ## RESULT
+Thus, implemented a C program to the hill cipher substitution techniques.
